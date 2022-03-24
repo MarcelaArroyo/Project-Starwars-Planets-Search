@@ -1,12 +1,53 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../App.css';
 import PlanetsContext from '../context/PlanetsContext';
 
 function TablePlanets() {
-  const { planets, filterByName } = useContext(PlanetsContext);
+  const { planets, filterByName, filterByNumericValues } = useContext(PlanetsContext);
+  // Requisito 3 e 4
+  const [arrFilterPlanets, setArrFilterPlanets] = useState([]);
+
+  useEffect(() => {
+    setArrFilterPlanets([...planets]);
+  }, [planets]);
+
+  useEffect(() => {
+    let accPlanets = [...planets];
+    const filterPlanets = () => {
+      filterByNumericValues.forEach(({ column, comparasion, value }) => {
+        if (comparasion === 'maior que') {
+          const maior = accPlanets
+            .filter((planet) => parseInt(planet[column], 10) > parseInt(value, 10));
+          accPlanets = [...maior];
+        } else if (comparasion === 'menor que') {
+          const menor = accPlanets
+            .filter((planet) => parseInt(planet[column], 10) < parseInt(value, 10));
+          accPlanets = [...menor];
+        } else if (comparasion === 'igual a') {
+          const igual = accPlanets
+            .filter((planet) => parseInt(planet[column], 10) === parseInt(value, 10));
+          accPlanets = [...igual];
+        }
+      });
+      return setArrFilterPlanets([...accPlanets]);
+    };
+    filterPlanets();
+  }, [filterByNumericValues]);
+
   return (
     <section>
-      <h2>Planets</h2>
+      {filterByNumericValues.map(({ column, comparasion, value }, index) => (
+        <h4 key={ index }>
+          {column}
+          {' '}
+          {comparasion}
+          {' '}
+          {value}
+        </h4>
+      ))}
+      <br />
+      <hr size="4" color="#C5AC11" />
+      <br />
       <table className="table-planets">
         <thead>
           <tr>
@@ -26,8 +67,8 @@ function TablePlanets() {
           </tr>
         </thead>
         <tbody>
-          {planets ? (
-            planets.filter((planet) => planet.name.includes(filterByName.name))
+          {arrFilterPlanets ? (
+            arrFilterPlanets.filter((planet) => planet.name.includes(filterByName.name))
               .map((planet) => (
                 <tr key={ planet.name }>
                   <td>{planet.name}</td>

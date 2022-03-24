@@ -25,9 +25,23 @@ function PlanetsProvider({ children }) {
     setFilterByName({ name: value });
   };
 
+  // Requisito 3
+  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
+  const handleClick = (column, comparasion, value) => {
+    setFilterByNumericValues([...filterByNumericValues, { column, comparasion, value }]);
+  };
+
   return (
     <main>
-      <PlanetsContext.Provider value={ { planets, filterByName, handleChange } }>
+      <PlanetsContext.Provider
+        value={
+          { planets,
+            filterByName,
+            handleChange,
+            handleClick,
+            filterByNumericValues }
+        }
+      >
         {children}
       </PlanetsContext.Provider>
     </main>
