@@ -5,23 +5,24 @@ function FilterNumericValues() {
   const [column, setColumns] = useState('population');
   const [comparison, setComparison] = useState('maior que');
   const [value, setValue] = useState(0);
-  const { handleClick } = useContext(PlanetsContext);
+  const { handleClick, optionColumns } = useContext(PlanetsContext);
+
   return (
     <nav>
       <h3>Dropdown</h3>
       <form>
-        <label htmlFor={ column }>
+        <label htmlFor="column">
           Coluna
           <select
-            id={ column }
+            id="column"
             data-testid="column-filter"
             onChange={ (event) => { setColumns(event.target.value); } }
           >
-            <option value="population">population</option>
-            <option value="orbital_period">orbital_period</option>
-            <option value="diameter">diameter</option>
-            <option value="rotation_period">rotation_period</option>
-            <option value="surface_water">surface_water</option>
+            {optionColumns.map((optionColumn) => (
+              <option key={ optionColumn } id={ optionColumn }>
+                {optionColumn}
+              </option>
+            ))}
           </select>
         </label>
         <label htmlFor={ comparison }>

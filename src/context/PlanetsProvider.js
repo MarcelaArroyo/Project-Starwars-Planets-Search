@@ -25,10 +25,27 @@ function PlanetsProvider({ children }) {
     setFilterByName({ name: value });
   };
 
+  // Requisito 5
+  const [optionColumns, setOptionColumn] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
+
   // Requisito 3
   const [filterByNumericValues, setFilterByNumericValues] = useState([]);
   const handleClick = (column, comparasion, value) => {
     setFilterByNumericValues([...filterByNumericValues, { column, comparasion, value }]);
+    // Requisito 5
+    let filterColumn = [];
+    optionColumns.forEach((optionColumn) => {
+      if (optionColumn !== column) {
+        filterColumn = [...filterColumn, optionColumn];
+      }
+    });
+    return setOptionColumn([...filterColumn]);
   };
 
   return (
@@ -39,7 +56,8 @@ function PlanetsProvider({ children }) {
             filterByName,
             handleChange,
             handleClick,
-            filterByNumericValues }
+            filterByNumericValues,
+            optionColumns }
         }
       >
         {children}
